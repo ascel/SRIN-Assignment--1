@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srin-assignment-1
+spec:
+  selector:
+    matchLabels:
+      app: srin-assignment-1
+  replicas: 3 #number of pods
+  template:
+    metadata:
+      labels:
+        app: srin-assignment-1
+    spec:
+      containers:
+        - name: srin-assignment-1
+          image: srin-assignment-1:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:   # Setting Environmental Variables
+            - name: DB_HOST   # Setting Database host address
+              value: mysql
+            - name: DB_NAME  # Setting Database name
+              value: user
+            - name: DB_USERNAME  # Setting Database username
+              value: root
+            - name: DB_PASSWORD # Setting Database password
+              value: root
+
+---
+# Define a 'Service' To Expose the application
+apiVersion: v1
+kind: Service
+metadata:
+  name: srin-assignment-1-service
+spec:
+  ports:
+    - protocol: "TCP"
+      port: 8080    # Port inside the cluster
+      targetPort: 8080   # Port exposed to the outside
+  selector:
+    app: srin-assignment-1
+  type: NodePort
