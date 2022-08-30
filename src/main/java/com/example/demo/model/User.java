@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +31,11 @@ public class User {
 
     @Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + "]";
+        Map<String, String> res = new HashMap<String, String>();
+
+        res.put("id", String.valueOf(id));
+        res.put("name", name);
+
+		return res.toString();
 	}
 }

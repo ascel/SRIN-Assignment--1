@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.repository.UserRepository;
@@ -26,9 +28,17 @@ public class UserController {
     private UserRepository userRepository;
         
     @GetMapping
-    public List<User> findAllUsers() {
-        // Implement
-        return (List<User>) userRepository.findAll();
+    public List<User> findAllUsers(@RequestParam(value = "id", required = false, defaultValue = "0") int id) {
+        List<User> users = (List<User>) userRepository.findAll();
+        if(id == 1) {
+            // odd
+            users = users.stream().filter(p -> p.getId() % 2 == 1).collect(Collectors.toList());
+        }
+        else if(id == 2) {
+            // even
+            users = users.stream().filter(p -> p.getId() % 2 == 0).collect(Collectors.toList());
+        }
+        return users;
     }
  
     @GetMapping("/{id}")
